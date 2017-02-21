@@ -1,0 +1,57 @@
+From: HeadSpin.io
+
+
+Android challenge
+
+There are two parts. Submit APKs and source for each part. When we review code, we care equally about clarity and correctness. If you get stuck, don't worry--just write a sentence or two about where you got stuck and why.
+
+1.
+
+Android gives access to basic network data in `/proc/net`, which is readable by any app without special permissions. An example cat of this file is below.
+
+`adb shell cat /proc/net/dev`
+
+```
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+rmnet_ipa0: 215292214  161610    0    0    0     0          0         0  6392904   90697    0    0    0     0       0          0
+r_rmnet_data7:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+r_rmnet_data4:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+rmnet_data1:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+rmnet_data3:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+ wlan0: 318826934  409210    0  144    0     0          0         0 35826191  250445    0    1    0     0       0          0
+rmnet_data5:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+r_rmnet_data1:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+rmnet_data7:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+dummy0:       0       0    0    0    0     0          0         0      210       3    0    0    0     0       0          0
+  p2p0:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+r_rmnet_data6:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+r_rmnet_data3:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+r_rmnet_data8:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+rmnet_data0: 213352894  161610    0    0    0     0          0         0  6392904   90697    0    0    0     0       0          0
+r_rmnet_data0:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+rmnet_data2:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+rmnet_data4:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+  sit0:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+    lo:   23732     814    0    0    0     0          0         0    23732     814    0    0    0     0       0          0
+r_rmnet_data5:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+rmnet_data6:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+r_rmnet_data2:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+```
+
+Write a content resolver that has a query that returns the current number of bytes sent and the current number of bytes received.
+
+The content resolver will be called with `adb shell content query --uri content://$YOURPROVIDER` and should return two columns, `sent_bytes` and `received_bytes`.
+
+
+2.
+
+Now instead of using a content resolver, write a service that regularly sends sent and received bytes to a socket. It's up to you to determine the time interval between updates, but try to be as real time as possible with a minimal performance overhead. The endpoint and protocol don't have to exist. The protocol should be something plausible.
+
+3. 
+
+Extra credit. Using the NDK, register with the OS so that data updates are triggered only when the network has activity. Is this lower overhead than the solution in 2?
+
+
+
+
